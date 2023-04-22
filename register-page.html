@@ -121,12 +121,28 @@
     min-width: min-content;
 }
 
+@media (max-width: 900px) {
+  .benefits-content-list-element {
+    width: calc(100% / 3);
+}
+}
+
 .benefits-content-list-icon {
     padding-bottom: 10px;
+    transition: padding-bottom 0.5s;
 }
 
 .benefits-content-list-icon > img {
     height: 60px;
+    transition: height 0.5s;
+}
+
+.benefits-content-list-element:hover > .benefits-content-list-icon > img {
+  height: 70px;
+}
+
+.benefits-content-list-element:hover > .benefits-content-list-icon {
+  padding-bottom: 0px;
 }
 
 .benefits-content-list-description, .benefits-content-list-description-blue {
@@ -311,7 +327,7 @@
 
 #testimonials-carousel > .carousel-indicators > li {
     display: inline-block;
-    width: calc(100% / 4 - 50px);
+    width: calc(100% / 5 - 50px);
     height: 0.6rem;
     margin: 20px;
     text-indent: -999px;
@@ -323,7 +339,7 @@
 
 #testimonials-carousel .carousel-indicators .active {
     display: inline-block;
-    width: calc(100% / 4 - 50px);
+    width: calc(100% / 5 - 50px);
     height: 0.6rem;
     margin: 20px;
     text-indent: -999px;
@@ -562,6 +578,32 @@
         text-decoration: none;
 }
 
+.map-content-button{
+  display: inline-block;
+  width: 20%;
+  min-width: 250px;
+  margin: 0 auto;
+  color: white;
+  background: #6F2DA8;
+  border: 1px solid #6F2DA8;
+  text-decoration: none;
+  text-align: center;
+  touch-action: manipulation;
+  cursor: pointer;
+  font-family: inherit;
+  font-weight: 600;
+  padding: 10px 32px;
+  font-size: 16px;
+  border-radius: 4px;
+}
+
+.map-content-button:hover{
+  color: white;
+  text-decoration: none;
+  background: #4e2175;
+  border: 1px solid #4e2175;
+}
+
 
 /*New link button*/
 
@@ -685,8 +727,27 @@ span.lia-button-link-arrow.lia-button-link-arrow-black {
 
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link rel="stylesheet preconnect" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-<script defer src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script defer src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<script>
+  $(document).ready(function() {
+
+        //link to Dynatrace office in Google maps
+        let url = "https://www.google.com/maps/place/Dynatrace/@54.39927,18.57639,17z/data=!3m1!4b1!4m6!3m5!1s0x46fd7528f4d428df:0x6af9edc74b6f5fa2!8m2!3d54.39927!4d18.57639!16s%2Fg%2F11b620zfdn"
+				
+        // Create a new div element
+				let newDiv = $("<div>");
+				
+				// Create a new button element with class 'map-content-button' and some parameters
+				let newButton = $("<a>").html("Link to Google Maps").addClass("map-content-button").attr("href", url).attr("role", "button");
+				
+				// Add the button to the div
+				newDiv.append(newButton);
+				
+				// Add the new div under the map element div
+				$("div.map-content").append(newDiv);
+			});
+</script>
 <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css" rel="stylesheet preconnect">
 
 </head>
@@ -840,6 +901,7 @@ span.lia-button-link-arrow.lia-button-link-arrow-black {
     <li data-target="#testimonials-carousel" data-slide-to="1"></li>
     <li data-target="#testimonials-carousel" data-slide-to="2"></li>
     <li data-target="#testimonials-carousel" data-slide-to="3"></li>
+    <li data-target="#testimonials-carousel" data-slide-to="4"></li>
   </ol>
 
   <div class="carousel-inner">
@@ -926,6 +988,27 @@ span.lia-button-link-arrow.lia-button-link-arrow-black {
         </div>
      </div>
     </div>
+
+    <div class="item">
+      <div class="testimonials-quote-wrap">
+       <div class="testimonials-quote-element">
+         <div class="testimonials-quote">
+           <p>With the people I love, I will do even the work I hate. With people I hate, I will not do the work I love.</p>
+           <img class="testimonial-quote-mark-1" src="https://community.dynatrace.com/html/assets/quote_black.png">
+           <img class="testimonial-quote-mark-2" src="https://community.dynatrace.com/html/assets/quote_black.png">
+         </div>
+       </div>
+         <div class="testimonials-picture">
+           <div class="testimonials-picture-avatar">
+             <img src="https://media.licdn.com/dms/image/C4D03AQEplfkBe8KRbA/profile-displayphoto-shrink_400_400/0/1658927990364?e=1687392000&v=beta&t=KU6CPD013d9FsrQVMSskI069RqKjAL1XWnubfP_Ahi4"></img>
+           </div>
+           <div class="testimonials-picture-name">
+             <h2>Mateusz</h2>
+             <p>applicant</p>
+           </div>
+         </div>
+      </div>
+     </div>
 
   <a class="left carousel-control" href="#testimonials-carousel" data-slide="prev">
     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
