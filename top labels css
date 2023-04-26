@@ -1,11 +1,24 @@
 .lia-quilt-column-side-content .lia-labels-list-sortable .lia-panel-heading-bar .dropdown-default-item .default-menu-option {
-    color: #1966FF;
+    color: black;
     font-size: 20px;
     font-weight: bold;
     padding: 0;
+    /* default cursor */
+    cursor: default;
+    /* element not clickable (although  it can still be focused on using Tab)
+     for full 'not-clickability' it's better to use JS  */
+    pointer-events: none;
+    /* I make here assumption that this css classes will be used for <select> tag */
+    /* hide dropdown menu arrow */
+    appearance: none;
+    /* for Firefox */
+    -moz-appearance: none;
+    /* for Chrome */
+    -webkit-appearance: none;
+    
 }
 
 .lia-quilt-column-side-content .lia-labels-list-sortable .lia-panel-heading-bar .dropdown-default-item .default-menu-option:after {
-    color: #1966FF;
+    color: black;
     margin-left: 10px;
 }
