@@ -7,13 +7,20 @@
 <#assign sorting = http.request.parameters.name.get("sort", "") />
  
 <#-- page size -->
-<#assign pageSize = coreNode.settings.name.get("layout.messages_per_page_linear", "10")?number />
-<#if user.registered>
-   <#assign pageSizeUser = settings.name.get("layout.messages_per_page_linear") />
-   <#if pageSizeUser?number != pageSize?number>
-       <#assign pageSize = pageSizeUser />
-   </#if>
-</#if>
+<#assign pageSize = ${30} />
+<#-- Always assigning a fixed value (30) for the page size instead of checking this value in settings.
+
+According to FreeMarker documentation: 'If the expression evaluates to a number
+then the numerical value will be converted to string according the default number format.'
+So the conversion to number by calling the '?number' Freemarker built-in is necessary
+at some point by default (because this value is used later  as a number for exaple in a equation).
+
+So we can either convert it to the number here and remember that it can be reconverted
+again to string at some point OR leave it here as a string and remember to always convert it to
+number when necessary
+
+I have chosen the second option, because the rest of the code
+(which I don't know perfectly) is already fitting to that approach-->
  
 <#if webuisupport.path.parameters.name.get("label-name")??>
    <#assign label = webuisupport.path.parameters.name.get("label-name").getText() />
@@ -35,6 +42,30 @@
 <#assign whereClause = label_query />
  
 <#switch sorting>
+<#-- Changing LiQL query depending on what sorting method user wants.
+I'm adding 4 new sorting methods: I'm looking for datasets names in 'baseQry' variable
+and I'm creating new queries accordingly -->
+   <#case "newest">
+       <#assign orderClause = "ORDER post_time DESC " />
+   <#break>
+   <#case "kudosAsc">
+       <#assign orderClause = "ORDER BY kudos.sum(weight) ASC " />
+   <#break>
+   <#case "noReplies">
+       <#assign orderClause = "AND replies.count(0) = 0" />
+       <#-- If I'm not mistaken, WHERE 'replies.count(0) = 0' will return zero-replies posts.
+       In this case I'm extending the WHERE statement of the query as described right below -->
+   <#break>
+   <#case "notSolved">
+       <#assign orderClause = "AND conversation.solved = false " />
+       <#-- In this case, I'm extending the 'WHERE' statement of the query to choose only not solved conversations.
+        At first, I thought that I could change the 'whereClause' variable because it's name suggests
+        that this variable is used to freely modify 'WHERE' part, but the code at 42. line and earlier suggest
+        that it's used in another way, and changing it could break the code.
+        Not putting 'ORDER BY' keyword in 'orderClause' variable can cause some confusion, so
+        in the real world I would discuss my thoughts on this matter with someone more experienced.-->
+   <#break>
+
    <#case "kudos">
        <#assign orderClause = "ORDER BY kudos.sum(weight) DESC " />
    <#break>
@@ -76,6 +107,13 @@
                    <option value="views" <#if sorting == 'views'>selected</#if>>${text.format("theme-lib.community-activity.views")}</option>
                    <option value="replies" <#if sorting == 'replies'>selected</#if>>${text.format("theme-lib.community-activity.replies")}</option>
                    <option value="kudos" <#if sorting == 'kudos'>selected</#if>>${text.format("theme-lib.community-activity.kudos")}</option>
+                   <#-- I'm adding new sorting options to the dropdown menu in analogical way.
+                   The chosen option is automatically highlighted.
+                   Text displayed to the end user is imported from some library to which I don't have access -->
+                   <option value="newest" <#if sorting == 'newest'>selected</#if>>${text.format("theme-lib.community-activity.newest")}</option>
+                   <option value="kudosAsc" <#if sorting == 'kudosAsc'>selected</#if>>${text.format("theme-lib.community-activity.kudosAsc")}</option>
+                   <option value="noReplies" <#if sorting == 'noReplies'>selected</#if>>${text.format("theme-lib.community-activity.noReplies")}</option>
+                   <option value="notSolved" <#if sorting == 'notSolved'>selected</#if>>${text.format("theme-lib.community-activity.notSolved")}</option>
                </select>
                <#if page.interactionStyle=="idea">
                  <@component id="custom.idea.status.label" />
@@ -149,8 +187,14 @@
        <#assign msg_status_txt = "theme-lib.general.thread-floated" />
    </#if>
    <#if msg.conversation.solved>
-       <#assign solved = "custom-thread-solved" />
-       <#assign msg_status_icon = "custom-thread-solved" />
+       <#-- 'if' statement above determines if the thread is solved, and if it's true,
+       we assign to three variables below names of the CSS classes,
+       so these 3 elements have different apperance for solved threads -->
+       <#assign solved = "my-solved-thread-class-name" />
+       <#assign msg_status_icon = "my-solved-thread-class-name" />
+       <#-- I needed to change the name of one class for solved threads,
+       so I changed the custom one, that was assigned to the 'solved' variable
+       (and which was used also for status icon) -->
        <#assign msg_status_txt = "theme-lib.general.thread-solved" />
    </#if>
    <#if !msg.user_context.read>
@@ -163,6 +207,7 @@
    <#assign labels = commonUtils.executeLiQLQuery(qry)![] />
 
    <#-- custom message tile -->
+   <#-- assigning below proper CSS class (empty string if thread is not solved, or real name is it's solved) to message tile -->
    <article class="custom-message-tile ${escalated} ${locked} ${solved} ${floated} ${requires_moderation} ${unread}">
        <#-- batch processing -->
        <#local showBatchProcessingCheckBox = "false"/>
@@ -185,6 +230,7 @@
         <div class="custom-message-header">
             <h3>
                 <#if msg.conversation.solved>
+                <#-- Writing some text (or maybe icon, because it's right before message subject) and assigning proper CSS class to it if the thread is solved -->
                     <i class="${solved}"><small>${text.format('theme-lib.general.thread-solved')}!</small></i>
                 </#if>
                 <a href="${msg.view_href}" title="${msg.subject}">

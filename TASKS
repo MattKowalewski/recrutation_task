@@ -14,7 +14,7 @@ The code you'll work on is created in a template engine called Freemarker, that 
 Here is a documentation to it: https://freemarker.apache.org
 In the code there is also used Lithium Query Language (LiQL) - language used to retrieve Community data using a familiar, SQL-like syntax.
 
-The knowledge of those technologies is not necessary to solve the problems. as they are very similar to other widely used languages.
+The knowledge of those technologies is not necessary to solve the problems. As they are very similar to other widely used languages.
 
 
 FOR theme-lib.message-list 

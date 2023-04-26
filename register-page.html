@@ -130,6 +130,8 @@
 .benefits-content-list-icon {
     padding-bottom: 10px;
     transition: padding-bottom 0.5s;
+    /* With the size of the icons, I'm also changing padding to create smooth animation
+    in which elements don't jump off their position */
 }
 
 .benefits-content-list-icon > img {
@@ -328,6 +330,8 @@
 #testimonials-carousel > .carousel-indicators > li {
     display: inline-block;
     width: calc(100% / 5 - 50px);
+    /* I needed to change size of the carousel indicators to fit 5 of them in one row instead of 4.
+    Ideally, this number would change automatically, but to that simple landing page it's enough*/
     height: 0.6rem;
     margin: 20px;
     text-indent: -999px;
@@ -578,6 +582,7 @@
         text-decoration: none;
 }
 
+/* There is no existing other violet buttons, so I'm defining my own button style*/
 .map-content-button{
   display: inline-block;
   width: 20%;
@@ -602,6 +607,11 @@
   text-decoration: none;
   background: #4e2175;
   border: 1px solid #4e2175;
+}
+
+.map-content-button:active{
+  color: white;
+  text-decoration: none;
 }
 
 
@@ -720,20 +730,19 @@ span.lia-button-link-arrow.lia-button-link-arrow-black {
     opacity: 1;
 }
 
-
-
-
 </style>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link rel="stylesheet preconnect" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<!-- I deleted 'defer' property from jquery link in order to load it earlier and to make my srpit work.
+  Alternatively I could also use vanilla javaScript-->
 <script defer src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 <script>
   $(document).ready(function() {
 
         //link to Dynatrace office in Google maps
-        let url = "https://www.google.com/maps/place/Dynatrace/@54.39927,18.57639,17z/data=!3m1!4b1!4m6!3m5!1s0x46fd7528f4d428df:0x6af9edc74b6f5fa2!8m2!3d54.39927!4d18.57639!16s%2Fg%2F11b620zfdn"
+        let url = "https://www.google.com/maps/place/Dynatrace/@54.39927,18.57639,17z/data=!3m1!4b1!4m6!3m5!1s0x46fd7528f4d428df:0x6af9edc74b6f5fa2!8m2!3d54.39927!4d18.57639!16s%2Fg%2F11b620zfdn";
 				
         // Create a new div element
 				let newDiv = $("<div>");
@@ -745,10 +754,10 @@ span.lia-button-link-arrow.lia-button-link-arrow-black {
 				newDiv.append(newButton);
 				
 				// Add the new div under the map element div
-				$("div.map-content").append(newDiv);
+				$("#map-box").append(newDiv);
 			});
 </script>
-<link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css" rel="stylesheet preconnect">
+<link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css" rel="stylesheet preconnect"> <!-- This link to glyphicons icons throws an error - something to consider as a next task -->
 
 </head>
 <body>
@@ -864,7 +873,7 @@ span.lia-button-link-arrow.lia-button-link-arrow-black {
 </div>
 
 <div class="map-wrapper">
-  <div class="map-content">
+  <div id="map-box" class="map-content">
     <div class="map-content-title">
       <div class="map-content-title-light">
         <p>Become a part of <b>global community</b></p>
